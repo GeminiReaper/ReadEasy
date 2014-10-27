@@ -5,6 +5,13 @@
  */
 package edu.temple.CIS3238;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author David
@@ -14,8 +21,9 @@ public class readEasyUI extends javax.swing.JFrame {
     /**
      * Creates new form readEasyUI
      */
-    public readEasyUI() {
+    public readEasyUI() throws FileNotFoundException {
         initComponents();
+
     }
 
     /**
@@ -188,8 +196,25 @@ public class readEasyUI extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+    public static void main(String args[]) throws FileNotFoundException {
+        readEasyUI r = null;
+        r = new readEasyUI();
+        r.setVisible(true);
+
+        Scanner s = new Scanner(new File("/Users/Ali/Downloads/Lab1.txt"));
+        ArrayList<String> list = new ArrayList<String>();
+        while (s.hasNext()) {
+            list.add(s.next());
+        }
+        s.close();
+        for (int i = 0; i < list.size(); i++) {
+            readEasyLabel.setText(list.get(i));
+            try {
+                Thread.sleep(1000); // we can use the user input here linked with the GUI text field
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -215,7 +240,11 @@ public class readEasyUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new readEasyUI().setVisible(true);
+                try {
+                    new readEasyUI().setVisible(true);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(readEasyUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -231,7 +260,7 @@ public class readEasyUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem openFile;
     private javax.swing.JButton pauseButton;
     private javax.swing.JButton playButton;
-    private javax.swing.JLabel readEasyLabel;
+    private static javax.swing.JLabel readEasyLabel;
     private javax.swing.JMenuItem recentFiles;
     private javax.swing.JLabel searchLabel;
     private java.awt.TextField searchTextField;
