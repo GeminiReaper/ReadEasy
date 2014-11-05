@@ -16,14 +16,11 @@ public class certainIndex {
 
     public String beforeAndAfterLabel(ArrayList<String> s, int from, int to) {
 
-       
-        
         String prints = null;
         List<String> A = new ArrayList<String>();
         for (int i = from; i <= to; i++) {
             A = s.subList(from, to);
-            
-            
+
         }
 
         prints = A.toString().replace(",", " ").replace("[", "").replace("]", "");
@@ -31,4 +28,17 @@ public class certainIndex {
         return prints;
     }
 
+    public String colorFocusedLetter(String s, int from, int to) {
+
+        String prints = null;
+
+        for (int i = from; i <= to; i++) {
+            
+            prints = s.substring(from, to);
+            
+
+        }
+        
+        return prints;
+    }
 }
