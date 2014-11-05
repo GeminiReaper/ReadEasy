@@ -248,7 +248,11 @@ public class readEasyUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-        // TODO add your handling code here:
+        try {
+            readtxt();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger("lol");
+        }
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void pauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseButtonActionPerformed
@@ -262,10 +266,11 @@ public class readEasyUI extends javax.swing.JFrame {
     public static void main(String args[]) throws FileNotFoundException {
 
         readEasyUI r = null;
+
         r = new readEasyUI();
         r.setVisible(true);
-
         readtxt();
+
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -320,7 +325,7 @@ public class readEasyUI extends javax.swing.JFrame {
     public static void readtxtFile() throws FileNotFoundException {
 
         Scanner s = new Scanner(new File("/Users/Ali/Downloads/Lab1.txt"));
-       
+
         ArrayList<String> list = new ArrayList<String>();
 
         while (s.hasNext()) {
@@ -334,7 +339,19 @@ public class readEasyUI extends javax.swing.JFrame {
             int L = list.size();
 
             for (int i = 0; i < L; i++) {
-                readEasyLabel.setText(list.get(i));
+                int focusWord = list.get(i).length();
+                int focusletter = Math.floorDiv(focusWord, 2);
+                for (int b = 0; b < focusWord; b++) {
+                    readEasyLabel.setText("<html>"
+                            + c.colorFocusedLetter(list.get(i), 0, focusletter)
+                            + "<font color='red'>"
+                            + list.get(i).charAt(focusletter)
+                            + "</font>"
+                            + c.colorFocusedLetter(list.get(i), focusletter + 1, focusWord)
+                            + "</html>");
+
+                }
+
                 jTextArea1.setText(list.get(0));
                 jTextArea1.setText(c.beforeAndAfterLabel(list, 0, i));
 
