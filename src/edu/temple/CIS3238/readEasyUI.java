@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class readEasyUI extends javax.swing.JFrame {
 
-    private static long userInput = 1000;
+    private static long userInput = 240;
     String wpm;
 
     public readEasyUI() throws FileNotFoundException {
@@ -51,6 +51,9 @@ public class readEasyUI extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
+        totalWordsLeft = new javax.swing.JLabel();
+        wordsLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openFile = new javax.swing.JMenuItem();
@@ -109,7 +112,7 @@ public class readEasyUI extends javax.swing.JFrame {
         jTextArea1.setDoubleBuffered(true);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jTextField1.setText("1000");
+        jTextField1.setText("250");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
@@ -119,6 +122,13 @@ public class readEasyUI extends javax.swing.JFrame {
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
         jScrollPane2.setViewportView(jTextArea2);
+
+        jLabel1.setText("N/a");
+
+        totalWordsLeft.setText("200");
+
+        wordsLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        wordsLabel.setText("Words");
 
         fileMenu.setText("File");
 
@@ -177,24 +187,29 @@ public class readEasyUI extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(211, 211, 211)
                         .addComponent(readEasyLabel)
-                        .addGap(0, 213, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(playButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(pauseButton)
-                                .addGap(101, 101, 101)
-                                .addComponent(etaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(wpmLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(searchLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addContainerGap(425, Short.MAX_VALUE)
+                        .addComponent(searchLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(wordsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(totalWordsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(playButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(pauseButton)
+                        .addGap(65, 65, 65)
+                        .addComponent(etaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(wpmLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -219,7 +234,10 @@ public class readEasyUI extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(wpmLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(etaLabel)))
+                        .addComponent(etaLabel)
+                        .addComponent(jLabel1)
+                        .addComponent(totalWordsLeft)
+                        .addComponent(wordsLabel)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -243,8 +261,9 @@ public class readEasyUI extends javax.swing.JFrame {
     }//GEN-LAST:event_searchTextFieldActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+
         wpm = jTextField1.getText();
-        userInput = Long.parseLong(wpm);
+        userInput = 1000/(Long.parseLong(wpm)/60);
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
@@ -256,8 +275,7 @@ public class readEasyUI extends javax.swing.JFrame {
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void pauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseButtonActionPerformed
-
-
+        setETA();
     }//GEN-LAST:event_pauseButtonActionPerformed
 
     /**
@@ -324,7 +342,7 @@ public class readEasyUI extends javax.swing.JFrame {
 
     public static void readtxtFile() throws FileNotFoundException {
 
-        Scanner s = new Scanner(new File("/Users/Ali/Downloads/Lab1.txt"));
+        Scanner s = new Scanner(new File("/Users/mikem_000/Documents/Labs/Software Design/ReadEasy.txt"));
 
         ArrayList<String> list = new ArrayList<String>();
 
@@ -341,6 +359,7 @@ public class readEasyUI extends javax.swing.JFrame {
             for (int i = 0; i < L; i++) {
                 int focusWord = list.get(i).length();
                 int focusletter = Math.floorDiv(focusWord, 2);
+                
                 for (int b = 0; b < focusWord; b++) {
                     readEasyLabel.setText("<html>"
                             + c.colorFocusedLetter(list.get(i), 0, focusletter)
@@ -365,7 +384,7 @@ public class readEasyUI extends javax.swing.JFrame {
                 jTextArea2.setLineWrap(true);
                 jTextField1.setEnabled(true);
                 Thread.sleep(userInput); // we can use the user input here linked with the GUI text field
-
+                
             }
         } catch (InterruptedException e) {
 
@@ -374,6 +393,22 @@ public class readEasyUI extends javax.swing.JFrame {
         }
 
     }
+public void setETA(){
+        int words = 200;
+        float milliseconds =  (words / 250) * 60000;
+        int seconds = (int) (milliseconds / 1000) % 60;
+        int minutes = (int) ((milliseconds / (1000*60)) % 60);
+        int hours   = (int) ((milliseconds / (1000*60*60)) % 24);
+        if (hours > 0){
+        jLabel1.setText(hours + " H " + minutes + " min " + seconds + " sec ");    
+        }else if (minutes > 0){
+        jLabel1.setText(minutes + " min " + seconds + " sec ");        
+        }else{
+        jLabel1.setText(seconds + " sec ");        
+        }
+        
+        
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem colorSet;
@@ -382,6 +417,7 @@ public class readEasyUI extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -397,6 +433,8 @@ public class readEasyUI extends javax.swing.JFrame {
     private java.awt.TextField searchTextField;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenuItem timerSet;
+    private javax.swing.JLabel totalWordsLeft;
+    private javax.swing.JLabel wordsLabel;
     private javax.swing.JLabel wpmLabel;
     private javax.swing.JMenuItem wpmSet;
     // End of variables declaration//GEN-END:variables
