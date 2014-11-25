@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,9 +25,23 @@ public class readEasyUI extends javax.swing.JFrame {
 
     private static long userInput = 240;
     String wpm;
+    private static Thread threadObject;
+    private static AtomicBoolean paused = new AtomicBoolean(false);
 
     public readEasyUI() throws FileNotFoundException {
         initComponents();
+        int red = 238;
+        int green = 238;
+        int blue = 238;
+
+        float[] hsb = Color.RGBtoHSB(red, green, blue, null);
+        float hue = hsb[0];
+        float saturation = hsb[1];
+        float brightness = hsb[2];
+        jTextArea1.setBackground(Color.getHSBColor(hue, saturation, brightness));
+
+        jTextArea2.setBackground(Color.getHSBColor(hue, saturation, brightness));
+        
 
     }
 
@@ -101,6 +116,8 @@ public class readEasyUI extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane1.setBorder(null);
+
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
@@ -118,6 +135,8 @@ public class readEasyUI extends javax.swing.JFrame {
                 jTextField1ActionPerformed(evt);
             }
         });
+
+        jScrollPane2.setBorder(null);
 
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
@@ -189,7 +208,7 @@ public class readEasyUI extends javax.swing.JFrame {
                         .addComponent(readEasyLabel)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(425, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(searchLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -263,19 +282,29 @@ public class readEasyUI extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
 
         wpm = jTextField1.getText();
-        userInput = 1000/(Long.parseLong(wpm)/60);
+        userInput = 1000 / (Long.parseLong(wpm) / 60);
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-        try {
-            readtxt();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger("lol");
+        if (paused.get()) {
+
+            paused.set(false);
+        }
+        synchronized (threadObject) {
+            threadObject.notify();
         }
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void pauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseButtonActionPerformed
+        if (!paused.get()) {
+
+            paused.set(true);
+        }
+        synchronized (threadObject) {
+            threadObject.notify();
+        }
         setETA();
+
     }//GEN-LAST:event_pauseButtonActionPerformed
 
     /**
@@ -286,8 +315,13 @@ public class readEasyUI extends javax.swing.JFrame {
         readEasyUI r = null;
 
         r = new readEasyUI();
+        fileMenu.setEnabled(true);
+        exitFile.setEnabled(true);
+        playButton.setEnabled(true);
+        pauseButton.setEnabled(true);
+        
         r.setVisible(true);
-        readtxt();
+      
 
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -312,109 +346,106 @@ public class readEasyUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        Runnable runnable = new Runnable() {
             public void run() {
-                // try {
-                //     new readEasyUI().setVisible(true);
-                //} catch (FileNotFoundException ex) {
-                //   Logger.getLogger(readEasyUI.class.getName()).log(Level.SEVERE, null, ex);
-                // }
-            }
-        });
-    }
+                Scanner s = null;
+                try {
+                    s = new Scanner(new File("/Users/Ali/Downloads/Lab1.txt"));
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(readEasyUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-    public static void readtxt() throws FileNotFoundException {
+                ArrayList<String> list = new ArrayList<String>();
 
-        int red = 238;
-        int green = 238;
-        int blue = 238;
+                while (s.hasNext()) {
+                    list.add(s.next());
+                }
+                s.close();
 
-        float[] hsb = Color.RGBtoHSB(red, green, blue, null);
-        float hue = hsb[0];
-        float saturation = hsb[1];
-        float brightness = hsb[2];
-        jTextArea1.setBackground(Color.getHSBColor(hue, saturation, brightness));
-        jTextArea2.setBackground(Color.getHSBColor(hue, saturation, brightness));
-
-        readtxtFile();
-
-    }
-
-    public static void readtxtFile() throws FileNotFoundException {
-
-        Scanner s = new Scanner(new File("/Users/mikem_000/Documents/Labs/Software Design/ReadEasy.txt"));
-
-        ArrayList<String> list = new ArrayList<String>();
-
-        while (s.hasNext()) {
-            list.add(s.next());
-        }
-        s.close();
-
-        try {
-            certainIndex c = new certainIndex();
-
-            int L = list.size();
-
-            for (int i = 0; i < L; i++) {
-                int focusWord = list.get(i).length();
-                int focusletter = Math.floorDiv(focusWord, 2);
+                certainIndex c = new certainIndex();
                 
-                for (int b = 0; b < focusWord; b++) {
-                    readEasyLabel.setText("<html>"
-                            + c.colorFocusedLetter(list.get(i), 0, focusletter)
-                            + "<font color='red'>"
-                            + list.get(i).charAt(focusletter)
-                            + "</font>"
-                            + c.colorFocusedLetter(list.get(i), focusletter + 1, focusWord)
-                            + "</html>");
+                while (true) {
+                    int L = list.size();
+                    for (int i = 0; i < L; i++) {
+                        if (paused.get()) {
+                            synchronized (threadObject) {
+                                
+                                try {
+                                    threadObject.wait();
+
+                                } catch (InterruptedException e) {
+                                }
+                            }
+                        }
+
+                        int focusWord = list.get(i).length();
+                        int focusletter = Math.floorDiv(focusWord, 2);
+
+                        for (int b = 0; b < focusWord; b++) {
+                            readEasyLabel.setText("<html>"
+                                    + c.colorFocusedLetter(list.get(i), 0, focusletter)
+                                    + "<font color='red'>"
+                                    + list.get(i).charAt(focusletter)
+                                    + "</font>"
+                                    + c.colorFocusedLetter(list.get(i), focusletter + 1, focusWord)
+                                    + "</html>");
+
+                        }
+
+                        jTextArea1.setText(list.get(0));
+                        jTextArea1.setText(c.beforeAndAfterLabel(list, 0, i));
+
+                        for (int k = i; k < L; k++) {
+
+                            jTextArea2.setText(c.beforeAndAfterLabel(list, i, L));
+
+                        }
+
+                        jTextArea1.setLineWrap(true);
+                        jTextArea2.setLineWrap(true);
+
+                        try {
+                            // Sleep
+
+                            Thread.sleep(userInput);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(readEasyUI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
 
                 }
 
-                jTextArea1.setText(list.get(0));
-                jTextArea1.setText(c.beforeAndAfterLabel(list, 0, i));
-
-                for (int k = i; k < L; k++) {
-
-                    jTextArea2.setText(c.beforeAndAfterLabel(list, i, L));
-
-                }
-
-                jTextArea1.setLineWrap(true);
-                jTextArea2.setLineWrap(true);
-                jTextField1.setEnabled(true);
-                Thread.sleep(userInput); // we can use the user input here linked with the GUI text field
-                
             }
-        } catch (InterruptedException e) {
 
-            e.printStackTrace();
-
-        }
+        };
+        threadObject = new Thread(runnable);
+        threadObject.start();
 
     }
-public void setETA(){
+
+
+    public void setETA() {
         int words = 200;
-        float milliseconds =  (words / 250) * 60000;
+        float milliseconds = (words / 250) * 60000;
         int seconds = (int) (milliseconds / 1000) % 60;
-        int minutes = (int) ((milliseconds / (1000*60)) % 60);
-        int hours   = (int) ((milliseconds / (1000*60*60)) % 24);
-        if (hours > 0){
-        jLabel1.setText(hours + " H " + minutes + " min " + seconds + " sec ");    
-        }else if (minutes > 0){
-        jLabel1.setText(minutes + " min " + seconds + " sec ");        
-        }else{
-        jLabel1.setText(seconds + " sec ");        
+        int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
+        int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
+        if (hours > 0) {
+            jLabel1.setText(hours + " H " + minutes + " min " + seconds + " sec ");
+        } else if (minutes > 0) {
+            jLabel1.setText(minutes + " min " + seconds + " sec ");
+        } else {
+            jLabel1.setText(seconds + " sec ");
         }
-        
-        
-}
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem colorSet;
     private javax.swing.JLabel etaLabel;
-    private javax.swing.JMenuItem exitFile;
-    private javax.swing.JMenu fileMenu;
+    private static javax.swing.JMenuItem exitFile;
+    private static javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
@@ -425,8 +456,8 @@ public void setETA(){
     private static javax.swing.JTextArea jTextArea2;
     private static javax.swing.JTextField jTextField1;
     private javax.swing.JMenuItem openFile;
-    private javax.swing.JButton pauseButton;
-    private javax.swing.JButton playButton;
+    private static javax.swing.JButton pauseButton;
+    private static javax.swing.JButton playButton;
     private static javax.swing.JLabel readEasyLabel;
     private javax.swing.JMenuItem recentFiles;
     private javax.swing.JLabel searchLabel;
