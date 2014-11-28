@@ -66,7 +66,7 @@ public class readEasyUI extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
-        jLabel1 = new javax.swing.JLabel();
+        etaTime = new javax.swing.JLabel();
         totalWordsLeft = new javax.swing.JLabel();
         wordsLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -142,7 +142,7 @@ public class readEasyUI extends javax.swing.JFrame {
         jTextArea2.setRows(5);
         jScrollPane2.setViewportView(jTextArea2);
 
-        jLabel1.setText("N/a");
+        etaTime.setText("N/a");
 
         totalWordsLeft.setText("200");
 
@@ -224,7 +224,7 @@ public class readEasyUI extends javax.swing.JFrame {
                         .addGap(65, 65, 65)
                         .addComponent(etaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(etaTime, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(wpmLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -254,7 +254,7 @@ public class readEasyUI extends javax.swing.JFrame {
                         .addComponent(wpmLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(etaLabel)
-                        .addComponent(jLabel1)
+                        .addComponent(etaTime)
                         .addComponent(totalWordsLeft)
                         .addComponent(wordsLabel)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -264,7 +264,8 @@ public class readEasyUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void exitFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitFileActionPerformed
-        // TODO add your handling code here:
+
+        System.exit(0);
     }//GEN-LAST:event_exitFileActionPerformed
 
     private void wpmSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wpmSetActionPerformed
@@ -432,11 +433,11 @@ public class readEasyUI extends javax.swing.JFrame {
         int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
         int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
         if (hours > 0) {
-            jLabel1.setText(hours + " H " + minutes + " min " + seconds + " sec ");
+            etaTime.setText(hours + " H " + minutes + " min " + seconds + " sec ");
         } else if (minutes > 0) {
-            jLabel1.setText(minutes + " min " + seconds + " sec ");
+            etaTime.setText(minutes + " min " + seconds + " sec ");
         } else {
-            jLabel1.setText(seconds + " sec ");
+            etaTime.setText(seconds + " sec ");
         }
 
     }
@@ -444,11 +445,11 @@ public class readEasyUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem colorSet;
     private javax.swing.JLabel etaLabel;
+    private javax.swing.JLabel etaTime;
     private static javax.swing.JMenuItem exitFile;
     private static javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

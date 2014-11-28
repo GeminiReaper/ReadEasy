@@ -123,7 +123,7 @@
                       <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
                       <Component id="etaLabel" min="-2" pref="46" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" pref="124" max="-2" attributes="0"/>
+                      <Component id="etaTime" min="-2" pref="124" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="wpmLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -160,7 +160,7 @@
                       <Component id="wpmLabel" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                       <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="etaLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="etaTime" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="totalWordsLeft" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="wordsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -312,7 +312,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="etaTime">
       <Properties>
         <Property name="text" type="java.lang.String" value="N/a"/>
       </Properties>
