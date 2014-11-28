@@ -38,9 +38,9 @@ public class readEasyUI extends javax.swing.JFrame {
         float hue = hsb[0];
         float saturation = hsb[1];
         float brightness = hsb[2];
-        jTextArea1.setBackground(Color.getHSBColor(hue, saturation, brightness));
+        textA1.setBackground(Color.getHSBColor(hue, saturation, brightness));
 
-        jTextArea2.setBackground(Color.getHSBColor(hue, saturation, brightness));
+        textA2.setBackground(Color.getHSBColor(hue, saturation, brightness));
         
 
     }
@@ -54,22 +54,22 @@ public class readEasyUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFileChooser1 = new javax.swing.JFileChooser();
-        readEasyLabel = new javax.swing.JLabel();
-        searchLabel = new javax.swing.JLabel();
-        searchTextField = new java.awt.TextField();
-        wpmLabel = new javax.swing.JLabel();
-        etaLabel = new javax.swing.JLabel();
-        playButton = new javax.swing.JButton();
-        pauseButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextField1 = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        fileChooser = new javax.swing.JFileChooser();
+        readEasyL = new javax.swing.JLabel();
+        searchL = new javax.swing.JLabel();
+        wpmL = new javax.swing.JLabel();
+        etaL = new javax.swing.JLabel();
         etaTime = new javax.swing.JLabel();
         totalWordsLeft = new javax.swing.JLabel();
-        wordsLabel = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        wordsL = new javax.swing.JLabel();
+        searchTF = new java.awt.TextField();
+        wpmTF = new javax.swing.JTextField();
+        playB = new javax.swing.JButton();
+        pauseB = new javax.swing.JButton();
+        scrollP1 = new javax.swing.JScrollPane();
+        scrollP2 = new javax.swing.JScrollPane();
+        textA2 = new javax.swing.JTextArea();
+        menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openFile = new javax.swing.JMenuItem();
         recentFiles = new javax.swing.JMenuItem();
@@ -82,72 +82,72 @@ public class readEasyUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        readEasyLabel.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
-        readEasyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        readEasyLabel.setText("ReadEasy");
+        readEasyL.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        readEasyL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        readEasyL.setText("ReadEasy");
 
-        searchLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        searchLabel.setText("Search");
+        searchL.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        searchL.setText("Search");
 
-        searchTextField.setText("textField1");
-        searchTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchTextFieldActionPerformed(evt);
-            }
-        });
+        wpmL.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        wpmL.setText("WPM:");
 
-        wpmLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        wpmLabel.setText("WPM:");
-
-        etaLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        etaLabel.setText("ETA:");
-
-        playButton.setText("Play");
-        playButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                playButtonActionPerformed(evt);
-            }
-        });
-
-        pauseButton.setText("Pause");
-        pauseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pauseButtonActionPerformed(evt);
-            }
-        });
-
-        jScrollPane1.setBorder(null);
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setWrapStyleWord(true);
-        jTextArea1.setAutoscrolls(false);
-        jTextArea1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.UIManager.getDefaults().getColor("Button.background"), javax.swing.UIManager.getDefaults().getColor("Button.background")));
-        jTextArea1.setCaretColor(javax.swing.UIManager.getDefaults().getColor("Button.background"));
-        jTextArea1.setDisabledTextColor(new java.awt.Color(51, 0, 51));
-        jTextArea1.setDoubleBuffered(true);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        jTextField1.setText("250");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-
-        jScrollPane2.setBorder(null);
-
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        etaL.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        etaL.setText("ETA:");
 
         etaTime.setText("N/a");
 
         totalWordsLeft.setText("200");
 
-        wordsLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        wordsLabel.setText("Words");
+        wordsL.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        wordsL.setText("Words");
+
+        searchTF.setText("textField1");
+        searchTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchTFActionPerformed(evt);
+            }
+        });
+
+        wpmTF.setText("250");
+        wpmTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                wpmTFActionPerformed(evt);
+            }
+        });
+
+        playB.setText("Play");
+        playB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                playBActionPerformed(evt);
+            }
+        });
+
+        pauseB.setText("Pause");
+        pauseB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pauseBActionPerformed(evt);
+            }
+        });
+
+        scrollP1.setBorder(null);
+
+        textA1.setColumns(20);
+        textA1.setLineWrap(true);
+        textA1.setRows(5);
+        textA1.setWrapStyleWord(true);
+        textA1.setAutoscrolls(false);
+        textA1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.UIManager.getDefaults().getColor("Button.background"), javax.swing.UIManager.getDefaults().getColor("Button.background")));
+        textA1.setCaretColor(javax.swing.UIManager.getDefaults().getColor("Button.background"));
+        textA1.setDisabledTextColor(new java.awt.Color(51, 0, 51));
+        textA1.setDoubleBuffered(true);
+        scrollP1.setViewportView(textA1);
+
+        scrollP2.setBorder(null);
+
+        textA2.setColumns(20);
+        textA2.setRows(5);
+        scrollP2.setViewportView(textA2);
 
         fileMenu.setText("File");
 
@@ -165,7 +165,7 @@ public class readEasyUI extends javax.swing.JFrame {
         });
         fileMenu.add(exitFile);
 
-        jMenuBar1.add(fileMenu);
+        menuBar.add(fileMenu);
 
         settingsMenu.setText("Settings");
 
@@ -188,12 +188,12 @@ public class readEasyUI extends javax.swing.JFrame {
         });
         settingsMenu.add(colorSet);
 
-        jMenuBar1.add(settingsMenu);
+        menuBar.add(settingsMenu);
 
         helpMenu.setText("Help");
-        jMenuBar1.add(helpMenu);
+        menuBar.add(helpMenu);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -201,62 +201,62 @@ public class readEasyUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane1)
+                    .addComponent(scrollP2)
+                    .addComponent(scrollP1)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(211, 211, 211)
-                        .addComponent(readEasyLabel)
+                        .addComponent(readEasyL)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(searchLabel)
+                        .addComponent(searchL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(searchTF, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(7, 7, 7)
-                        .addComponent(wordsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(wordsL, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(totalWordsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(playButton)
+                        .addComponent(playB)
                         .addGap(18, 18, 18)
-                        .addComponent(pauseButton)
+                        .addComponent(pauseB)
                         .addGap(65, 65, 65)
-                        .addComponent(etaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(etaL, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addComponent(etaTime, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(wpmLabel)
+                        .addComponent(wpmL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(wpmTF, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(searchTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(searchTF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(searchL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollP1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(readEasyLabel)
+                .addComponent(readEasyL)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollP2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(pauseButton)
-                            .addComponent(playButton))
+                            .addComponent(pauseB)
+                            .addComponent(playB))
                         .addGap(10, 10, 10))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(wpmLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(etaLabel)
+                        .addComponent(wpmL, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(wpmTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(etaL)
                         .addComponent(etaTime)
                         .addComponent(totalWordsLeft)
-                        .addComponent(wordsLabel)))
+                        .addComponent(wordsL)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -276,17 +276,17 @@ public class readEasyUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_colorSetActionPerformed
 
-    private void searchTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTextFieldActionPerformed
+    private void searchTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_searchTextFieldActionPerformed
+    }//GEN-LAST:event_searchTFActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void wpmTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wpmTFActionPerformed
 
-        wpm = jTextField1.getText();
+        wpm = wpmTF.getText();
         userInput = 1000 / (Long.parseLong(wpm) / 60);
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_wpmTFActionPerformed
 
-    private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
+    private void playBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playBActionPerformed
         if (paused.get()) {
 
             paused.set(false);
@@ -294,9 +294,9 @@ public class readEasyUI extends javax.swing.JFrame {
         synchronized (threadObject) {
             threadObject.notify();
         }
-    }//GEN-LAST:event_playButtonActionPerformed
+    }//GEN-LAST:event_playBActionPerformed
 
-    private void pauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseButtonActionPerformed
+    private void pauseBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseBActionPerformed
         if (!paused.get()) {
 
             paused.set(true);
@@ -306,7 +306,7 @@ public class readEasyUI extends javax.swing.JFrame {
         }
         setETA();
 
-    }//GEN-LAST:event_pauseButtonActionPerformed
+    }//GEN-LAST:event_pauseBActionPerformed
 
     /**
      * @param args the command line arguments
@@ -318,8 +318,8 @@ public class readEasyUI extends javax.swing.JFrame {
         r = new readEasyUI();
         fileMenu.setEnabled(true);
         exitFile.setEnabled(true);
-        playButton.setEnabled(true);
-        pauseButton.setEnabled(true);
+        playB.setEnabled(true);
+        pauseB.setEnabled(true);
         
         r.setVisible(true);
       
@@ -383,7 +383,7 @@ public class readEasyUI extends javax.swing.JFrame {
                         int focusletter = Math.floorDiv(focusWord, 2);
 
                         for (int b = 0; b < focusWord; b++) {
-                            readEasyLabel.setText("<html>"
+                            readEasyL.setText("<html>"
                                     + c.colorFocusedLetter(list.get(i), 0, focusletter)
                                     + "<font color='red'>"
                                     + list.get(i).charAt(focusletter)
@@ -393,17 +393,17 @@ public class readEasyUI extends javax.swing.JFrame {
 
                         }
 
-                        jTextArea1.setText(list.get(0));
-                        jTextArea1.setText(c.beforeAndAfterLabel(list, 0, i));
+                        textA1.setText(list.get(0));
+                        textA1.setText(c.beforeAndAfterLabel(list, 0, i));
 
                         for (int k = i; k < L; k++) {
 
-                            jTextArea2.setText(c.beforeAndAfterLabel(list, i, L));
+                            textA2.setText(c.beforeAndAfterLabel(list, i, L));
 
                         }
 
-                        jTextArea1.setLineWrap(true);
-                        jTextArea2.setLineWrap(true);
+                        textA1.setLineWrap(true);
+                        textA2.setLineWrap(true);
 
                         try {
                             // Sleep
@@ -444,30 +444,30 @@ public class readEasyUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem colorSet;
-    private javax.swing.JLabel etaLabel;
+    private javax.swing.JLabel etaL;
     private javax.swing.JLabel etaTime;
     private static javax.swing.JMenuItem exitFile;
+    private javax.swing.JFileChooser fileChooser;
     private static javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    public static final javax.swing.JTextArea jTextArea1 = new javax.swing.JTextArea();
-    private static javax.swing.JTextArea jTextArea2;
-    private static javax.swing.JTextField jTextField1;
+    private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openFile;
-    private static javax.swing.JButton pauseButton;
-    private static javax.swing.JButton playButton;
-    private static javax.swing.JLabel readEasyLabel;
+    private static javax.swing.JButton pauseB;
+    private static javax.swing.JButton playB;
+    private static javax.swing.JLabel readEasyL;
     private javax.swing.JMenuItem recentFiles;
-    private javax.swing.JLabel searchLabel;
-    private java.awt.TextField searchTextField;
+    private javax.swing.JScrollPane scrollP1;
+    private javax.swing.JScrollPane scrollP2;
+    private javax.swing.JLabel searchL;
+    private java.awt.TextField searchTF;
     private javax.swing.JMenu settingsMenu;
+    public static final javax.swing.JTextArea textA1 = new javax.swing.JTextArea();
+    private static javax.swing.JTextArea textA2;
     private javax.swing.JMenuItem timerSet;
     private javax.swing.JLabel totalWordsLeft;
-    private javax.swing.JLabel wordsLabel;
-    private javax.swing.JLabel wpmLabel;
+    private javax.swing.JLabel wordsL;
+    private javax.swing.JLabel wpmL;
     private javax.swing.JMenuItem wpmSet;
+    private static javax.swing.JTextField wpmTF;
     // End of variables declaration//GEN-END:variables
 }
