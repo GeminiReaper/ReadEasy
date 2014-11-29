@@ -1,13 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package edu.temple.CIS3238;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -16,35 +19,41 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.filechooser.FileFilter;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
 /**
  *
  * @author David
  */
-public class readEasyUI extends javax.swing.JFrame {
-
-    private static long userInput = 240;
-    String wpm;
+public class readEasyUI extends JFrame {
+    
     private static Thread threadObject;
     private static AtomicBoolean paused = new AtomicBoolean(false);
-
+    private static File userFile;
+    private static String[] docText;
+    private static int wpm = wpmCalc(200);
+    
     public readEasyUI() throws FileNotFoundException {
         initComponents();
         int red = 238;
         int green = 238;
         int blue = 238;
-
+        
         float[] hsb = Color.RGBtoHSB(red, green, blue, null);
         float hue = hsb[0];
         float saturation = hsb[1];
         float brightness = hsb[2];
         textA1.setBackground(Color.getHSBColor(hue, saturation, brightness));
-
+        
         textA2.setBackground(Color.getHSBColor(hue, saturation, brightness));
         
-
+        
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -63,12 +72,12 @@ public class readEasyUI extends javax.swing.JFrame {
         totalWordsLeft = new javax.swing.JLabel();
         wordsL = new javax.swing.JLabel();
         searchTF = new java.awt.TextField();
-        wpmTF = new javax.swing.JTextField();
         playB = new javax.swing.JButton();
         pauseB = new javax.swing.JButton();
         scrollP1 = new javax.swing.JScrollPane();
         scrollP2 = new javax.swing.JScrollPane();
         textA2 = new javax.swing.JTextArea();
+        wpmSpinner = new javax.swing.JSpinner();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openFile = new javax.swing.JMenuItem();
@@ -79,6 +88,10 @@ public class readEasyUI extends javax.swing.JFrame {
         timerSet = new javax.swing.JMenuItem();
         colorSet = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
+
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setDialogTitle("ReadEasy");
+        fileChooser.setFileFilter(new MyCustomFilter());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,7 +110,7 @@ public class readEasyUI extends javax.swing.JFrame {
 
         etaTime.setText("N/a");
 
-        totalWordsLeft.setText("200");
+        totalWordsLeft.setText("0");
 
         wordsL.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         wordsL.setText("Words");
@@ -106,13 +119,6 @@ public class readEasyUI extends javax.swing.JFrame {
         searchTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchTFActionPerformed(evt);
-            }
-        });
-
-        wpmTF.setText("250");
-        wpmTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                wpmTFActionPerformed(evt);
             }
         });
 
@@ -149,9 +155,21 @@ public class readEasyUI extends javax.swing.JFrame {
         textA2.setRows(5);
         scrollP2.setViewportView(textA2);
 
+        wpmSpinner.setValue(200);
+        wpmSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                wpmSpinnerStateChanged(evt);
+            }
+        });
+
         fileMenu.setText("File");
 
         openFile.setText("Open");
+        openFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openFileActionPerformed(evt);
+            }
+        });
         fileMenu.add(openFile);
 
         recentFiles.setText("Recent");
@@ -199,135 +217,158 @@ public class readEasyUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(scrollP2)
-                    .addComponent(scrollP1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(211, 211, 211)
-                        .addComponent(readEasyL)
-                        .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(scrollP1)
+            .addComponent(scrollP2)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(2, 2, 2)
+                            .addComponent(wordsL)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(totalWordsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(playB)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(pauseB)
+                            .addGap(141, 141, 141)
+                            .addComponent(etaL, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(2, 2, 2)
+                            .addComponent(etaTime, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(wpmL, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(wpmSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(searchL)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(searchTF, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(19, 19, 19)))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(searchL)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchTF, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(wordsL, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(totalWordsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(playB)
-                        .addGap(18, 18, 18)
-                        .addComponent(pauseB)
-                        .addGap(65, 65, 65)
-                        .addComponent(etaL, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)
-                        .addComponent(etaTime, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(wpmL)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(wpmTF, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGap(234, 234, 234)
+                        .addComponent(readEasyL)))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(searchTF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(searchL)
+                    .addComponent(searchTF, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollP1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(6, 6, 6)
                 .addComponent(readEasyL)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(6, 6, 6)
                 .addComponent(scrollP2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(pauseB)
-                            .addComponent(playB))
-                        .addGap(10, 10, 10))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(wpmL, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(wpmTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(etaL)
-                        .addComponent(etaTime)
+                        .addComponent(wordsL)
                         .addComponent(totalWordsLeft)
-                        .addComponent(wordsL)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(playB)
+                        .addComponent(pauseB))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(etaTime)
+                        .addComponent(wpmSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(wpmL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void exitFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitFileActionPerformed
-
+        
         System.exit(0);
     }//GEN-LAST:event_exitFileActionPerformed
-
+    
     private void wpmSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wpmSetActionPerformed
-
+        
     }//GEN-LAST:event_wpmSetActionPerformed
-
+    
     private void colorSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorSetActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_colorSetActionPerformed
-
+    
     private void searchTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchTFActionPerformed
-
-    private void wpmTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wpmTFActionPerformed
-
-        wpm = wpmTF.getText();
-        userInput = 1000 / (Long.parseLong(wpm) / 60);
-    }//GEN-LAST:event_wpmTFActionPerformed
-
+    
     private void playBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playBActionPerformed
         if (paused.get()) {
-
+            
             paused.set(false);
         }
         synchronized (threadObject) {
             threadObject.notify();
         }
     }//GEN-LAST:event_playBActionPerformed
-
+    
     private void pauseBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseBActionPerformed
         if (!paused.get()) {
-
+            
             paused.set(true);
         }
         synchronized (threadObject) {
             threadObject.notify();
         }
         setETA();
-
+        
     }//GEN-LAST:event_pauseBActionPerformed
+    
+    private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
+        
+        int returnVal = fileChooser.showOpenDialog(this);
+        if(returnVal == fileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                //Display File in TextArea
+                //textA2.read(new FileReader(file.getAbsolutePath()), null);
+                if(Utils.getExtension(file).equals("doc")) {
+                    docText = readMyDocument(file.getAbsolutePath());
+                    textA2.setText(docText.toString());
+                }
+                else if(Utils.getExtension(file).equals("txt")) {
+                    userFile = file;
+                    textA2.read(new FileReader(file.getAbsolutePath()), null);
+                }
+                
+            } catch (Exception ex) {
+                System.out.println("problem accessing file" + file.getAbsolutePath());
+            }
+        }        
+    }//GEN-LAST:event_openFileActionPerformed
 
+    private void wpmSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_wpmSpinnerStateChanged
+        wpm = (int) wpmSpinner.getValue();
+    }//GEN-LAST:event_wpmSpinnerStateChanged
+    
+    
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) throws FileNotFoundException {
-
+        
         readEasyUI r = null;
-
+        
         r = new readEasyUI();
-        fileMenu.setEnabled(true);
-        exitFile.setEnabled(true);
-        playB.setEnabled(true);
-        pauseB.setEnabled(true);
+//        fileMenu.setEnabled(true);
+//        exitFile.setEnabled(true);
+//        playB.setEnabled(true);
+//        pauseB.setEnabled(true);
         
         r.setVisible(true);
-      
-
+        
+        
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+        */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -345,24 +386,24 @@ public class readEasyUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(readEasyUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         Runnable runnable = new Runnable() {
             public void run() {
                 Scanner s = null;
                 try {
-                    s = new Scanner(new File("/Users/Ali/Downloads/Lab1.txt"));
-                } catch (FileNotFoundException ex) {
+                    s = new Scanner(userFile.getAbsolutePath());
+                } catch (Exception ex) {
                     Logger.getLogger(readEasyUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+                
                 ArrayList<String> list = new ArrayList<String>();
-
+                
                 while (s.hasNext()) {
                     list.add(s.next());
                 }
                 s.close();
-
+                
                 certainIndex c = new certainIndex();
                 
                 while (true) {
@@ -373,15 +414,15 @@ public class readEasyUI extends javax.swing.JFrame {
                                 
                                 try {
                                     threadObject.wait();
-
+                                    
                                 } catch (InterruptedException e) {
                                 }
                             }
                         }
-
+                        
                         int focusWord = list.get(i).length();
                         int focusletter = Math.floorDiv(focusWord, 2);
-
+                        
                         for (int b = 0; b < focusWord; b++) {
                             readEasyL.setText("<html>"
                                     + c.colorFocusedLetter(list.get(i), 0, focusletter)
@@ -390,42 +431,42 @@ public class readEasyUI extends javax.swing.JFrame {
                                     + "</font>"
                                     + c.colorFocusedLetter(list.get(i), focusletter + 1, focusWord)
                                     + "</html>");
-
+                            
                         }
-
+                        
                         textA1.setText(list.get(0));
                         textA1.setText(c.beforeAndAfterLabel(list, 0, i));
-
+                        
                         for (int k = i; k < L; k++) {
-
+                            
                             textA2.setText(c.beforeAndAfterLabel(list, i, L));
-
+                            
                         }
-
+                        
                         textA1.setLineWrap(true);
                         textA2.setLineWrap(true);
-
+                        
                         try {
                             // Sleep
-
-                            Thread.sleep(userInput);
+              
+                            Thread.sleep(wpm);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(readEasyUI.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
+                        
                     }
-
+                    
                 }
-
+                
             }
-
+            
         };
         threadObject = new Thread(runnable);
         threadObject.start();
-
+        
     }
-
-
+    
+    
     public void setETA() {
         int words = 200;
         float milliseconds = (words / 250) * 60000;
@@ -439,9 +480,68 @@ public class readEasyUI extends javax.swing.JFrame {
         } else {
             etaTime.setText(seconds + " sec ");
         }
-
+        
     }
-
+    
+    private static String[] readMyDocument(String fileName) {
+        POIFSFileSystem fs = null;
+        String [] text = null;
+        try {
+            fs = new POIFSFileSystem(new FileInputStream(fileName));
+            HWPFDocument doc = new HWPFDocument(fs);
+            
+            /** Read the content **/
+            text = readParagraphs(doc);
+            
+            int pageNumber=1;
+            
+            /** We will try reading the header for page 1**/
+            //readHeader(doc, pageNumber);
+            
+            /** Let's try reading the footer for page 1**/
+            //readFooter(doc, pageNumber);
+            
+            /** Read the document summary**/
+            //readDocumentSummary(doc);
+            
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return text;
+    }
+    
+    private static String[] readParagraphs(HWPFDocument doc) throws Exception{
+        WordExtractor we = new WordExtractor(doc);
+        
+        /**Get the total number of paragraphs**/
+        String[] paragraphs = we.getParagraphText();
+        System.out.println("Total Paragraphs: "+paragraphs.length);
+        
+        for (int i = 0; i < paragraphs.length; i++) {
+            
+            System.out.println("Length of paragraph "+(i +1)+": "+ paragraphs[i].length());
+            System.out.println(paragraphs[i].toString());
+            
+        }
+        
+        return paragraphs;
+        
+    }
+    
+    private static int wpmCalc(int userInput) {
+        double value;
+        int wpmRet;
+        
+        value = (userInput / 60);
+        wpmRet = (int)(1000 / value);
+        
+        return wpmRet;
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem colorSet;
     private javax.swing.JLabel etaL;
@@ -468,6 +568,6 @@ public class readEasyUI extends javax.swing.JFrame {
     private javax.swing.JLabel wordsL;
     private javax.swing.JLabel wpmL;
     private javax.swing.JMenuItem wpmSet;
-    private static javax.swing.JTextField wpmTF;
+    private javax.swing.JSpinner wpmSpinner;
     // End of variables declaration//GEN-END:variables
 }
