@@ -36,8 +36,9 @@ public class readEasyUI extends JFrame {
     private static AtomicBoolean paused = new AtomicBoolean(true);
     private static File userFile;
     private static String[] docText;
-    private static int wpm = 400;
     private static Color letterColor = Color.red;
+    private static long sleepTime = 250;
+    String wpm;
     
     public readEasyUI() throws FileNotFoundException {
         initComponents();
@@ -178,6 +179,13 @@ public class readEasyUI extends JFrame {
                 wpmSpinnerStateChanged(evt);
             }
         });
+        wpmSpinner.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                wpmSpinnerInputMethodTextChanged(evt);
+            }
+        });
 
         fileMenu.setText("File");
 
@@ -250,38 +258,40 @@ public class readEasyUI extends JFrame {
             .addComponent(scrollP2)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(2, 2, 2)
-                            .addComponent(wordsL)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(totalWordsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(playB)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(pauseB)
-                            .addGap(141, 141, 141)
-                            .addComponent(etaL, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(2, 2, 2)
-                            .addComponent(etaTime, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(wpmL, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(wpmSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(searchL)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(searchTF, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(19, 19, 19)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(225, 225, 225)
-                        .addComponent(focusWordFirstL, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(wordsL)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(totalWordsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(playB)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(pauseB)
+                                .addGap(141, 141, 141)
+                                .addComponent(etaL, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)
+                                .addComponent(etaTime, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(wpmL, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(wpmSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(searchL)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchTF, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(19, 19, 19)))
+                        .addGap(0, 11, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(focusWordFirstL, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(focusLetterL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(focusWordEndL)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                        .addComponent(focusWordEndL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,7 +388,9 @@ public class readEasyUI extends JFrame {
     }//GEN-LAST:event_openFileActionPerformed
     
     private void wpmSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_wpmSpinnerStateChanged
-        wpm = (int) wpmSpinner.getValue();
+        wpm = (String) wpmSpinner.getValue();
+        sleepTime = 1000/(Long.parseLong(wpm)/60);
+        //wpm = (int) wpmSpinner.getValue();
     }//GEN-LAST:event_wpmSpinnerStateChanged
     
     private void greenColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_greenColorActionPerformed
@@ -391,6 +403,11 @@ public class readEasyUI extends JFrame {
         letterColor = Color.red;
         focusLetterL.setForeground(letterColor);
     }//GEN-LAST:event_redColorActionPerformed
+
+    private void wpmSpinnerInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_wpmSpinnerInputMethodTextChanged
+        wpm = (String) wpmSpinner.getValue();
+        sleepTime = 1000/(Long.parseLong(wpm)/60);
+    }//GEN-LAST:event_wpmSpinnerInputMethodTextChanged
     
     
     
@@ -481,6 +498,7 @@ public class readEasyUI extends JFrame {
                             focusWordFirstL.setText(Character.toString(list.get(i).charAt(0)));
                             focusLetterL.setText(Character.toString((list.get(i).charAt(1))));
                             focusLetterL.setForeground(letterColor);
+                            focusLetterL.setText("");
                         }
                         else if(list.get(i).length() == 3) {
                             focusWordFirstL.setText(Character.toString(list.get(i).charAt(0)));
@@ -511,7 +529,7 @@ public class readEasyUI extends JFrame {
                     try {
                         // Sleep
                         
-                        Thread.sleep(wpm);
+                        Thread.sleep(sleepTime);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(readEasyUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
