@@ -374,7 +374,6 @@ public class readEasyUI extends JFrame {
                 }
                 else if(Utils.getExtension(file).equals("txt")) {
                     userFile = file;
-                    textA2.read(new FileReader(file.getAbsolutePath()), null);
                     threadObject.start();
                 }
                 
@@ -467,6 +466,9 @@ public class readEasyUI extends JFrame {
                 int L = list.size();
 
                 for (int i = 0; i < L; i++) {
+                    
+                    textA2.setText(list.toString());
+                    
                     if (paused.get()) {
                         synchronized (threadObject) {
                             
@@ -487,14 +489,17 @@ public class readEasyUI extends JFrame {
                     
                     for (int b = 0; b < focusWord; b++) {
                         if(list.get(i).length() == 1) {
+                            focusWordFirstL.setText("");
                             focusLetterL.setText(focusMid);
                             focusLetterL.setForeground(letterColor);
+                            focusWordEndL.setText("");
+                            
                         }
                         else if(list.get(i).length() == 2) {
                             focusWordFirstL.setText(Character.toString(list.get(i).charAt(0)));
                             focusLetterL.setText(Character.toString((list.get(i).charAt(1))));
                             focusLetterL.setForeground(letterColor);
-                            focusLetterL.setText("");
+                            focusWordEndL.setText("");
                         }
                         else if(list.get(i).length() == 3) {
                             focusWordFirstL.setText(Character.toString(list.get(i).charAt(0)));
