@@ -19,6 +19,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileFilter;
 import org.apache.poi.hwpf.HWPFDocument;
@@ -32,16 +33,18 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 public class readEasyUI extends JFrame {
     
     private static Thread threadObject;
-    private static AtomicBoolean paused = new AtomicBoolean(false);
+    private static AtomicBoolean paused = new AtomicBoolean(true);
     private static File userFile;
     private static String[] docText;
-    private static int wpm = wpmCalc(200);
+    private static int wpm = 400;
+    private static Color letterColor = Color.red;
     
     public readEasyUI() throws FileNotFoundException {
         initComponents();
         int red = 238;
         int green = 238;
         int blue = 238;
+        
         
         float[] hsb = Color.RGBtoHSB(red, green, blue, null);
         float hue = hsb[0];
@@ -64,7 +67,10 @@ public class readEasyUI extends JFrame {
     private void initComponents() {
 
         fileChooser = new javax.swing.JFileChooser();
-        readEasyL = new javax.swing.JLabel();
+        colorChooser = new javax.swing.JColorChooser();
+        focusWordFirstL = new javax.swing.JLabel();
+        focusLetterL = new javax.swing.JLabel();
+        focusWordEndL = new javax.swing.JLabel();
         searchL = new javax.swing.JLabel();
         wpmL = new javax.swing.JLabel();
         etaL = new javax.swing.JLabel();
@@ -81,12 +87,14 @@ public class readEasyUI extends JFrame {
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openFile = new javax.swing.JMenuItem();
-        recentFiles = new javax.swing.JMenuItem();
         exitFile = new javax.swing.JMenuItem();
         settingsMenu = new javax.swing.JMenu();
         wpmSet = new javax.swing.JMenuItem();
         timerSet = new javax.swing.JMenuItem();
-        colorSet = new javax.swing.JMenuItem();
+        colorMenu = new javax.swing.JMenu();
+        redColor = new javax.swing.JMenuItem();
+        greenColor = new javax.swing.JMenuItem();
+        blueColor = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
 
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -95,9 +103,19 @@ public class readEasyUI extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        readEasyL.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
-        readEasyL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        readEasyL.setText("ReadEasy");
+        focusWordFirstL.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        focusWordFirstL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        focusWordFirstL.setText("Rea");
+        focusWordFirstL.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        focusLetterL.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        focusLetterL.setForeground(new java.awt.Color(255, 0, 0));
+        focusLetterL.setText("d");
+
+        focusWordEndL.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        focusWordEndL.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        focusWordEndL.setText("Easy");
+        focusWordEndL.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
         searchL.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         searchL.setText("Search");
@@ -136,8 +154,6 @@ public class readEasyUI extends JFrame {
             }
         });
 
-        scrollP1.setBorder(null);
-
         textA1.setColumns(20);
         textA1.setLineWrap(true);
         textA1.setRows(5);
@@ -149,10 +165,11 @@ public class readEasyUI extends JFrame {
         textA1.setDoubleBuffered(true);
         scrollP1.setViewportView(textA1);
 
-        scrollP2.setBorder(null);
-
         textA2.setColumns(20);
+        textA2.setLineWrap(true);
         textA2.setRows(5);
+        textA2.setWrapStyleWord(true);
+        textA2.setAutoscrolls(false);
         scrollP2.setViewportView(textA2);
 
         wpmSpinner.setValue(200);
@@ -171,9 +188,6 @@ public class readEasyUI extends JFrame {
             }
         });
         fileMenu.add(openFile);
-
-        recentFiles.setText("Recent");
-        fileMenu.add(recentFiles);
 
         exitFile.setText("Exit");
         exitFile.addActionListener(new java.awt.event.ActionListener() {
@@ -198,13 +212,28 @@ public class readEasyUI extends JFrame {
         timerSet.setText("Timer");
         settingsMenu.add(timerSet);
 
-        colorSet.setText("Color");
-        colorSet.addActionListener(new java.awt.event.ActionListener() {
+        colorMenu.setText("Color");
+
+        redColor.setText("Red");
+        redColor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                colorSetActionPerformed(evt);
+                redColorActionPerformed(evt);
             }
         });
-        settingsMenu.add(colorSet);
+        colorMenu.add(redColor);
+
+        greenColor.setText("Green");
+        greenColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                greenColorActionPerformed(evt);
+            }
+        });
+        colorMenu.add(greenColor);
+
+        blueColor.setText("Blue");
+        colorMenu.add(blueColor);
+
+        settingsMenu.add(colorMenu);
 
         menuBar.add(settingsMenu);
 
@@ -246,8 +275,12 @@ public class readEasyUI extends JFrame {
                             .addComponent(searchTF, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(19, 19, 19)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(234, 234, 234)
-                        .addComponent(readEasyL)))
+                        .addGap(225, 225, 225)
+                        .addComponent(focusWordFirstL, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(focusLetterL)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(focusWordEndL)))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -260,8 +293,11 @@ public class readEasyUI extends JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollP1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
-                .addComponent(readEasyL)
-                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(focusWordFirstL)
+                    .addComponent(focusWordEndL)
+                    .addComponent(focusLetterL))
+                .addGap(18, 18, 18)
                 .addComponent(scrollP2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,7 +311,7 @@ public class readEasyUI extends JFrame {
                         .addComponent(etaTime)
                         .addComponent(wpmSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(wpmL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -289,10 +325,6 @@ public class readEasyUI extends JFrame {
     private void wpmSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wpmSetActionPerformed
         
     }//GEN-LAST:event_wpmSetActionPerformed
-    
-    private void colorSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorSetActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_colorSetActionPerformed
     
     private void searchTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTFActionPerformed
         // TODO add your handling code here:
@@ -331,10 +363,12 @@ public class readEasyUI extends JFrame {
                 if(Utils.getExtension(file).equals("doc")) {
                     docText = readMyDocument(file.getAbsolutePath());
                     textA2.setText(docText.toString());
+                    
                 }
                 else if(Utils.getExtension(file).equals("txt")) {
                     userFile = file;
                     textA2.read(new FileReader(file.getAbsolutePath()), null);
+                    threadObject.start();
                 }
                 
             } catch (Exception ex) {
@@ -342,10 +376,21 @@ public class readEasyUI extends JFrame {
             }
         }        
     }//GEN-LAST:event_openFileActionPerformed
-
+    
     private void wpmSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_wpmSpinnerStateChanged
         wpm = (int) wpmSpinner.getValue();
     }//GEN-LAST:event_wpmSpinnerStateChanged
+    
+    private void greenColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_greenColorActionPerformed
+        
+        letterColor = Color.green;
+        focusLetterL.setForeground(letterColor);
+    }//GEN-LAST:event_greenColorActionPerformed
+
+    private void redColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redColorActionPerformed
+        letterColor = Color.red;
+        focusLetterL.setForeground(letterColor);
+    }//GEN-LAST:event_redColorActionPerformed
     
     
     
@@ -387,12 +432,12 @@ public class readEasyUI extends JFrame {
         }
         //</editor-fold>
         
-        /* Create and display the form */
+        /* Read in the file and scroll text upon play action */
         Runnable runnable = new Runnable() {
             public void run() {
                 Scanner s = null;
                 try {
-                    s = new Scanner(userFile.getAbsolutePath());
+                    s = new Scanner(userFile);
                 } catch (Exception ex) {
                     Logger.getLogger(readEasyUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -406,63 +451,83 @@ public class readEasyUI extends JFrame {
                 
                 certainIndex c = new certainIndex();
                 
-                while (true) {
-                    int L = list.size();
-                    for (int i = 0; i < L; i++) {
-                        if (paused.get()) {
-                            synchronized (threadObject) {
+                int L = list.size();
+
+                for (int i = 0; i < L; i++) {
+                    if (paused.get()) {
+                        synchronized (threadObject) {
+                            
+                            try {
+                                threadObject.wait();
                                 
-                                try {
-                                    threadObject.wait();
-                                    
-                                } catch (InterruptedException e) {
-                                }
+                            } catch (InterruptedException e) {
                             }
                         }
-                        
-                        int focusWord = list.get(i).length();
-                        int focusletter = Math.floorDiv(focusWord, 2);
-                        
-                        for (int b = 0; b < focusWord; b++) {
-                            readEasyL.setText("<html>"
-                                    + c.colorFocusedLetter(list.get(i), 0, focusletter)
-                                    + "<font color='red'>"
-                                    + list.get(i).charAt(focusletter)
-                                    + "</font>"
-                                    + c.colorFocusedLetter(list.get(i), focusletter + 1, focusWord)
-                                    + "</html>");
+                    }
+                    
+                    int focusWord = list.get(i).length();
+                    int focusletter = Math.floorDiv(focusWord, 2);
+                    String firstPart, focusMid, endPart;
+                        firstPart = c.colorFocusedLetter(list.get(i), 0, focusletter);
+                        focusMid = Character.toString((list.get(i).charAt(focusletter)));
+                        endPart = c.colorFocusedLetter(list.get(i), focusletter + 1, focusWord);
+                    
+                    for (int b = 0; b < focusWord; b++) {
+                        if(list.get(i).length() == 1) {
+                            focusLetterL.setText(focusMid);
+                            focusLetterL.setForeground(letterColor);
+                        }
+                        else if(list.get(i).length() == 2) {
+                            focusWordFirstL.setText(Character.toString(list.get(i).charAt(0)));
+                            focusLetterL.setText(Character.toString((list.get(i).charAt(1))));
+                            focusLetterL.setForeground(letterColor);
+                        }
+                        else if(list.get(i).length() == 3) {
+                            focusWordFirstL.setText(Character.toString(list.get(i).charAt(0)));
+                            focusLetterL.setText(Character.toString((list.get(i).charAt(1))));
+                            focusLetterL.setForeground(letterColor);
+                            focusWordEndL.setText(Character.toString(list.get(i).charAt(2)));
                             
                         }
-                        
-                        textA1.setText(list.get(0));
-                        textA1.setText(c.beforeAndAfterLabel(list, 0, i));
-                        
-                        for (int k = i; k < L; k++) {
-                            
-                            textA2.setText(c.beforeAndAfterLabel(list, i, L));
-                            
+                        else {
+                            focusWordFirstL.setText(firstPart);
+                            focusLetterL.setText(focusMid);
+                            focusLetterL.setForeground(letterColor);
+                            focusWordEndL.setText(endPart);
                         }
                         
-                        textA1.setLineWrap(true);
-                        textA2.setLineWrap(true);
-                        
-                        try {
-                            // Sleep
-              
-                            Thread.sleep(wpm);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(readEasyUI.class.getName()).log(Level.SEVERE, null, ex);
-                        }
                         
                     }
                     
+                    textA1.setText(list.get(0));
+                    textA1.setText(c.beforeAndAfterLabel(list, 0, i));
+                    
+                    for (int k = i; k < L; k++) {
+                        
+                        textA2.setText(c.beforeAndAfterLabel(list, i, L));
+                        
+                    }
+                    
+                    try {
+                        // Sleep
+                        
+                        Thread.sleep(wpm);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(readEasyUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    
+                    
                 }
+                
+                
+                
                 
             }
             
         };
         threadObject = new Thread(runnable);
-        threadObject.start();
+        
         
     }
     
@@ -541,21 +606,31 @@ public class readEasyUI extends JFrame {
         return wpmRet;
     }
     
+    private void setColorLetter(Color c) {
+        
+        letterColor = c;
+    }
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem colorSet;
+    private javax.swing.JMenuItem blueColor;
+    private javax.swing.JColorChooser colorChooser;
+    private javax.swing.JMenu colorMenu;
     private javax.swing.JLabel etaL;
     private javax.swing.JLabel etaTime;
     private static javax.swing.JMenuItem exitFile;
     private javax.swing.JFileChooser fileChooser;
     private static javax.swing.JMenu fileMenu;
+    private static javax.swing.JLabel focusLetterL;
+    private static javax.swing.JLabel focusWordEndL;
+    private static javax.swing.JLabel focusWordFirstL;
+    private javax.swing.JMenuItem greenColor;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openFile;
     private static javax.swing.JButton pauseB;
     private static javax.swing.JButton playB;
-    private static javax.swing.JLabel readEasyL;
-    private javax.swing.JMenuItem recentFiles;
+    private javax.swing.JMenuItem redColor;
     private javax.swing.JScrollPane scrollP1;
     private javax.swing.JScrollPane scrollP2;
     private javax.swing.JLabel searchL;
