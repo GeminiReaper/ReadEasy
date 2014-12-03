@@ -233,6 +233,11 @@ public class readEasyUI extends JFrame {
         colorMenu.add(greenColor);
 
         blueColor.setText("Blue");
+        blueColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                blueColorActionPerformed(evt);
+            }
+        });
         colorMenu.add(blueColor);
 
         settingsMenu.add(colorMenu);
@@ -253,8 +258,7 @@ public class readEasyUI extends JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(focusWordFirstL, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(focusWordFirstL, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(focusLetterL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -395,6 +399,11 @@ public class readEasyUI extends JFrame {
         wpm = (String) jComboBox1.getSelectedItem();
         sleepTime = 1000/(Long.parseLong(wpm)/60);
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void blueColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blueColorActionPerformed
+        letterColor = Color.blue;
+        focusLetterL.setForeground(letterColor);
+    }//GEN-LAST:event_blueColorActionPerformed
     
     
     

@@ -87,6 +87,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Blue"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="blueColorActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -128,8 +131,7 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="focusWordFirstL" min="-2" pref="293" max="-2" attributes="0"/>
+                      <Component id="focusWordFirstL" min="-2" pref="303" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="focusLetterL" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
