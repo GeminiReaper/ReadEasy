@@ -37,7 +37,7 @@ public class readEasyUI extends JFrame {
     private static File userFile;
     private static String[] docText;
     private static Color letterColor = Color.red;
-    private static long sleepTime = 250;
+    private static long sleepTime = 1000;
     String wpm;
     
     public readEasyUI() throws FileNotFoundException {
@@ -84,7 +84,7 @@ public class readEasyUI extends JFrame {
         scrollP1 = new javax.swing.JScrollPane();
         scrollP2 = new javax.swing.JScrollPane();
         textA2 = new javax.swing.JTextArea();
-        wpmSpinner = new javax.swing.JSpinner();
+        jComboBox1 = new javax.swing.JComboBox();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openFile = new javax.swing.JMenuItem();
@@ -173,17 +173,11 @@ public class readEasyUI extends JFrame {
         textA2.setAutoscrolls(false);
         scrollP2.setViewportView(textA2);
 
-        wpmSpinner.setValue(200);
-        wpmSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                wpmSpinnerStateChanged(evt);
-            }
-        });
-        wpmSpinner.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                wpmSpinnerInputMethodTextChanged(evt);
+        jComboBox1.setEditable(true);
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "250", "300", "350", "400", "450", "500", "550" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
             }
         });
 
@@ -259,7 +253,19 @@ public class readEasyUI extends JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addContainerGap()
+                        .addComponent(focusWordFirstL, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(focusLetterL)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(focusWordEndL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(448, 448, 448)
+                                .addComponent(searchL)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchTF, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(2, 2, 2)
                                 .addComponent(wordsL)
@@ -276,21 +282,8 @@ public class readEasyUI extends JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(wpmL, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(wpmSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(searchL)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(searchTF, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(19, 19, 19)))
-                        .addGap(0, 11, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(focusWordFirstL, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(focusLetterL)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(focusWordEndL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -319,8 +312,8 @@ public class readEasyUI extends JFrame {
                         .addComponent(pauseB))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(etaTime)
-                        .addComponent(wpmSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(wpmL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(wpmL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -386,13 +379,7 @@ public class readEasyUI extends JFrame {
             }
         }        
     }//GEN-LAST:event_openFileActionPerformed
-    
-    private void wpmSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_wpmSpinnerStateChanged
-        wpm = (String) wpmSpinner.getValue();
-        sleepTime = 1000/(Long.parseLong(wpm)/60);
-        //wpm = (int) wpmSpinner.getValue();
-    }//GEN-LAST:event_wpmSpinnerStateChanged
-    
+        
     private void greenColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_greenColorActionPerformed
         
         letterColor = Color.green;
@@ -404,10 +391,10 @@ public class readEasyUI extends JFrame {
         focusLetterL.setForeground(letterColor);
     }//GEN-LAST:event_redColorActionPerformed
 
-    private void wpmSpinnerInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_wpmSpinnerInputMethodTextChanged
-        wpm = (String) wpmSpinner.getValue();
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        wpm = (String) jComboBox1.getSelectedItem();
         sleepTime = 1000/(Long.parseLong(wpm)/60);
-    }//GEN-LAST:event_wpmSpinnerInputMethodTextChanged
+    }//GEN-LAST:event_jComboBox1ActionPerformed
     
     
     
@@ -644,6 +631,7 @@ public class readEasyUI extends JFrame {
     private static javax.swing.JLabel focusWordFirstL;
     private javax.swing.JMenuItem greenColor;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openFile;
     private static javax.swing.JButton pauseB;
@@ -661,6 +649,5 @@ public class readEasyUI extends JFrame {
     private javax.swing.JLabel wordsL;
     private javax.swing.JLabel wpmL;
     private javax.swing.JMenuItem wpmSet;
-    private javax.swing.JSpinner wpmSpinner;
     // End of variables declaration//GEN-END:variables
 }
