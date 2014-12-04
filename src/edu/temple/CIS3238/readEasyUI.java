@@ -257,10 +257,10 @@ public class readEasyUI extends JFrame {
             .addComponent(scrollP1)
             .addComponent(scrollP2)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(focusWordFirstL, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(focusWordFirstL, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(focusLetterL)
-                .addGap(0, 0, 0)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(focusWordEndL, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
@@ -395,6 +395,8 @@ public class readEasyUI extends JFrame {
         String w = (String) wpmComboBox.getSelectedItem();
         wpm = Long.parseLong(w);
         sleepTime = wpmCalc(wpm);
+        setWordCount();
+        setETA();
     }//GEN-LAST:event_wpmComboBoxActionPerformed
 
     private void blueColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blueColorActionPerformed
@@ -462,7 +464,8 @@ public class readEasyUI extends JFrame {
                 certainIndex c = new certainIndex();
                 
                 int L = list.size();
-
+                totalWords = list.size();
+                
                 for (int i = 0; i < L; i++) {
                     
                     textA2.setText(list.toString());
@@ -524,6 +527,9 @@ public class readEasyUI extends JFrame {
                         textA2.setText(c.beforeAndAfterLabel(list, i, L));
                         
                     }
+                    setWordCount();
+                    setETA();
+                    totalWords = totalWords - 1;
                     
                     try {
                         // Sleep
@@ -552,7 +558,7 @@ public class readEasyUI extends JFrame {
         wordCount.setText(totalWords + "");
     }
     
-    public void setETA() {
+    public static void setETA() {
         
         long milliseconds = (totalWords * sleepTime);
         int seconds = (int) (milliseconds / 1000) % 60;
