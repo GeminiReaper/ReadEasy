@@ -140,7 +140,7 @@
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
               <Component id="wordsL" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="totalWordsLeft" min="-2" pref="62" max="-2" attributes="0"/>
+              <Component id="wordCount" min="-2" pref="62" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="playB" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -186,7 +186,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="etaL" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="wordsL" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="totalWordsLeft" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="wordCount" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="playB" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="pauseB" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -270,11 +270,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="N/a"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+      </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="totalWordsLeft">
+    <Component class="javax.swing.JLabel" name="wordCount">
       <Properties>
         <Property name="text" type="java.lang.String" value="0"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="wordsL">
       <Properties>

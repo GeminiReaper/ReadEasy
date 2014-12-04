@@ -77,7 +77,7 @@ public class readEasyUI extends JFrame {
         wpmL = new javax.swing.JLabel();
         etaL = new javax.swing.JLabel();
         etaTime = new javax.swing.JLabel();
-        totalWordsLeft = new javax.swing.JLabel();
+        wordCount = new javax.swing.JLabel();
         wordsL = new javax.swing.JLabel();
         searchTF = new java.awt.TextField();
         playB = new javax.swing.JButton();
@@ -130,7 +130,7 @@ public class readEasyUI extends JFrame {
 
         etaTime.setText("N/a");
 
-        totalWordsLeft.setText("0");
+        wordCount.setText("0");
 
         wordsL.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         wordsL.setText("Words");
@@ -267,7 +267,7 @@ public class readEasyUI extends JFrame {
                 .addGap(2, 2, 2)
                 .addComponent(wordsL)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(totalWordsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(wordCount, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(playB)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -308,7 +308,7 @@ public class readEasyUI extends JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(etaL)
                         .addComponent(wordsL)
-                        .addComponent(totalWordsLeft)
+                        .addComponent(wordCount)
                         .addComponent(playB)
                         .addComponent(pauseB))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -548,6 +548,9 @@ public class readEasyUI extends JFrame {
         
     }
     
+    public static void setWordCount(){
+        wordCount.setText(totalWords + "");
+    }
     
     public void setETA() {
         
@@ -634,7 +637,7 @@ public class readEasyUI extends JFrame {
     private javax.swing.JColorChooser colorChooser;
     private javax.swing.JMenu colorMenu;
     private javax.swing.JLabel etaL;
-    private javax.swing.JLabel etaTime;
+    private static javax.swing.JLabel etaTime;
     private static javax.swing.JMenuItem exitFile;
     private javax.swing.JFileChooser fileChooser;
     private static javax.swing.JMenu fileMenu;
@@ -656,7 +659,7 @@ public class readEasyUI extends JFrame {
     public static final javax.swing.JTextArea textA1 = new javax.swing.JTextArea();
     private static javax.swing.JTextArea textA2;
     private javax.swing.JMenuItem timerSet;
-    private javax.swing.JLabel totalWordsLeft;
+    private static javax.swing.JLabel wordCount;
     private javax.swing.JLabel wordsL;
     private javax.swing.JComboBox wpmComboBox;
     private javax.swing.JLabel wpmL;
