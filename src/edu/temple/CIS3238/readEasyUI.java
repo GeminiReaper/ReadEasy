@@ -37,8 +37,8 @@ public class readEasyUI extends JFrame {
     private static File userFile;
     private static String[] docText;
     private static Color letterColor = Color.red;
-    private static long sleepTime = 1000;
-    String wpm;
+    private static long sleepTime = 240;
+    private static long wpm;
     
     public readEasyUI() throws FileNotFoundException {
         initComponents();
@@ -391,8 +391,9 @@ public class readEasyUI extends JFrame {
     }//GEN-LAST:event_redColorActionPerformed
 
     private void wpmComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wpmComboBoxActionPerformed
-        wpm = (String) wpmComboBox.getSelectedItem();
-        sleepTime = 1000/(Long.parseLong(wpm)/60);
+        String w = (String) wpmComboBox.getSelectedItem();
+        wpm = Long.parseLong(w);
+        sleepTime = wpmCalc(wpm);
     }//GEN-LAST:event_wpmComboBoxActionPerformed
 
     private void blueColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blueColorActionPerformed
@@ -611,14 +612,14 @@ public class readEasyUI extends JFrame {
         
     }
     
-    private static int wpmCalc(int userInput) {
-        double value;
-        int wpmRet;
+    private static long wpmCalc(long userInput) {
+        long value;
+        long sleep;
         
         value = (userInput / 60);
-        wpmRet = (int)(1000 / value);
+        sleep = (int)(1000 / value);
         
-        return wpmRet;
+        return sleep;
     }
     
     private void setColorLetter(Color c) {
