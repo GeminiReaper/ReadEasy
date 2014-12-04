@@ -145,7 +145,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="WordsL" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="wordCount" min="-2" pref="59" max="-2" attributes="0"/>
+                      <Component id="wordCount" min="-2" pref="41" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="playB" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -160,7 +160,7 @@
                       <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="28" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -188,8 +188,8 @@
                       <Component id="etaL" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="playB" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="pauseB" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="wordCount" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="WordsL" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="wordCount" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="etaTime" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -271,6 +271,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="N/a"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+      </AuxValues>
     </Component>
     <Component class="java.awt.TextField" name="searchTF">
       <Properties>
@@ -378,11 +381,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox1ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="wordCount">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="0"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="WordsL">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -390,6 +388,14 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Words:"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="wordCount">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

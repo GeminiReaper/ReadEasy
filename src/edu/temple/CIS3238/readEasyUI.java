@@ -37,8 +37,9 @@ public class readEasyUI extends JFrame {
     private static File userFile;
     private static String[] docText;
     private static Color letterColor = Color.red;
-    private static long sleepTime = 1000;
-    private String wpm;   
+    private static long sleepTime = 682;
+    private static long wpm;   
+    private static int totalWords = 0;
     
     public readEasyUI() throws FileNotFoundException {
         initComponents();
@@ -83,8 +84,8 @@ public class readEasyUI extends JFrame {
         scrollP2 = new javax.swing.JScrollPane();
         textA2 = new javax.swing.JTextArea();
         jComboBox1 = new javax.swing.JComboBox();
-        wordCount = new javax.swing.JTextField();
         WordsL = new javax.swing.JLabel();
+        wordCount = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openFile = new javax.swing.JMenuItem();
@@ -176,10 +177,10 @@ public class readEasyUI extends JFrame {
             }
         });
 
-        wordCount.setText("0");
-
         WordsL.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         WordsL.setText("Words:");
+
+        wordCount.setText("0");
 
         fileMenu.setText("File");
 
@@ -268,7 +269,7 @@ public class readEasyUI extends JFrame {
                         .addContainerGap()
                         .addComponent(WordsL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(wordCount, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(wordCount, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(playB)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -281,7 +282,7 @@ public class readEasyUI extends JFrame {
                         .addComponent(wpmL, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,8 +306,8 @@ public class readEasyUI extends JFrame {
                         .addComponent(etaL)
                         .addComponent(playB)
                         .addComponent(pauseB)
-                        .addComponent(wordCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(WordsL))
+                        .addComponent(WordsL)
+                        .addComponent(wordCount))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(etaTime)
                         .addComponent(wpmL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -373,7 +374,8 @@ public class readEasyUI extends JFrame {
             } catch (Exception ex) {
                 System.out.println("problem accessing file" + file.getAbsolutePath());
             }
-        }        
+        }
+                
     }//GEN-LAST:event_openFileActionPerformed
         
     private void greenColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_greenColorActionPerformed
@@ -388,8 +390,11 @@ public class readEasyUI extends JFrame {
     }//GEN-LAST:event_redColorActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        wpm = (String) jComboBox1.getSelectedItem();
-        sleepTime = 1000/(Long.parseLong(wpm)/60);
+        String w = (String) jComboBox1.getSelectedItem();
+        wpm = Long.parseLong(w);
+        sleepTime = wpmCalc(wpm);
+        setETA();
+        setWordCount();
     }//GEN-LAST:event_jComboBox1ActionPerformed
     
     
@@ -452,7 +457,7 @@ public class readEasyUI extends JFrame {
                 certainIndex c = new certainIndex();
                 
                 int L = list.size();
-                //int totalWords = list.size();
+                totalWords = list.size();
                 
                 for (int i = 0; i < L; i++) {
                     if (paused.get()) {
@@ -506,11 +511,14 @@ public class readEasyUI extends JFrame {
                     textA1.setText(c.beforeAndAfterLabel(list, 0, i));
                     
                     for (int k = i; k < L; k++) {
-                        //wordCount.setText(totalWords + "Left");
-                        //totalWords = totalWords - 1;
+
                         textA2.setText(c.beforeAndAfterLabel(list, i, L));
                         
                     }
+                    
+                    setWordCount();
+                    setETA();
+                    totalWords = totalWords - 1;
                     
                     try {
                         // Sleep
@@ -534,14 +542,14 @@ public class readEasyUI extends JFrame {
         
         
     }
-    
-    public int getTotalWords(ArrayList<String> list ){
-        int words = list.size();
-        return words;
+
+    public static void setWordCount(){
+        wordCount.setText(totalWords + "");
     }
     
-    public void setETA(int words) {
-        float milliseconds = (words / 250) * 60000;
+    public static void setETA() {
+        
+        long milliseconds = (totalWords * sleepTime);
         int seconds = (int) (milliseconds / 1000) % 60;
         int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
         int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
@@ -577,7 +585,6 @@ public class readEasyUI extends JFrame {
             //readDocumentSummary(doc);
             
             
-            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -603,12 +610,12 @@ public class readEasyUI extends JFrame {
         
     }
     
-    private static int wpmCalc(int userInput) {
-        double value;
-        int wpmRet;
+    private static long wpmCalc(long userInput) {
+        long value;
+        long wpmRet;
         
         value = (userInput / 60);
-        wpmRet = (int)(1000 / value);
+        wpmRet = (1000 / value);
         
         return wpmRet;
     }
@@ -625,7 +632,7 @@ public class readEasyUI extends JFrame {
     private javax.swing.JColorChooser colorChooser;
     private javax.swing.JMenu colorMenu;
     private javax.swing.JLabel etaL;
-    private javax.swing.JLabel etaTime;
+    private static javax.swing.JLabel etaTime;
     private static javax.swing.JMenuItem exitFile;
     private javax.swing.JFileChooser fileChooser;
     private static javax.swing.JMenu fileMenu;
@@ -648,7 +655,7 @@ public class readEasyUI extends JFrame {
     public static final javax.swing.JTextArea textA1 = new javax.swing.JTextArea();
     private static javax.swing.JTextArea textA2;
     private javax.swing.JMenuItem timerSet;
-    private javax.swing.JTextField wordCount;
+    private static javax.swing.JLabel wordCount;
     private javax.swing.JLabel wpmL;
     private javax.swing.JMenuItem wpmSet;
     // End of variables declaration//GEN-END:variables
