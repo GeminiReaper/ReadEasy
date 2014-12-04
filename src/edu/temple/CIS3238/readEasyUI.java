@@ -39,6 +39,7 @@ public class readEasyUI extends JFrame {
     private static Color letterColor = Color.red;
     private static long sleepTime = 240;
     private static long wpm;
+    private static int totalWords = 0;
     
     public readEasyUI() throws FileNotFoundException {
         initComponents();
@@ -549,8 +550,8 @@ public class readEasyUI extends JFrame {
     
     
     public void setETA() {
-        int words = 200;
-        float milliseconds = (words / 250) * 60000;
+        
+        long milliseconds = (totalWords * sleepTime);
         int seconds = (int) (milliseconds / 1000) % 60;
         int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
         int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
