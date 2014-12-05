@@ -156,22 +156,28 @@ public class readEasyUI extends JFrame {
             }
         });
 
+        scrollP1.setBorder(null);
+
         textA1.setColumns(20);
         textA1.setLineWrap(true);
         textA1.setRows(5);
         textA1.setWrapStyleWord(true);
         textA1.setAutoscrolls(false);
-        textA1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.UIManager.getDefaults().getColor("Button.background"), javax.swing.UIManager.getDefaults().getColor("Button.background")));
+        textA1.setBorder(null);
         textA1.setCaretColor(javax.swing.UIManager.getDefaults().getColor("Button.background"));
         textA1.setDisabledTextColor(new java.awt.Color(51, 0, 51));
         textA1.setDoubleBuffered(true);
         scrollP1.setViewportView(textA1);
+        textA1.getAccessibleContext().setAccessibleDescription("");
+
+        scrollP2.setBorder(null);
 
         textA2.setColumns(20);
         textA2.setLineWrap(true);
         textA2.setRows(5);
         textA2.setWrapStyleWord(true);
         textA2.setAutoscrolls(false);
+        textA2.setBorder(null);
         scrollP2.setViewportView(textA2);
 
         wpmComboBox.setEditable(true);
@@ -342,6 +348,7 @@ public class readEasyUI extends JFrame {
         synchronized (threadObject) {
             threadObject.notify();
         }
+        pauseB.setEnabled(true);
     }//GEN-LAST:event_playBActionPerformed
     
     private void pauseBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseBActionPerformed
@@ -352,8 +359,9 @@ public class readEasyUI extends JFrame {
         synchronized (threadObject) {
             threadObject.notify();
         }
+        pauseB.setEnabled(false);
+        setWordCount();
         setETA();
-        
     }//GEN-LAST:event_pauseBActionPerformed
     
     private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
@@ -377,7 +385,9 @@ public class readEasyUI extends JFrame {
             } catch (Exception ex) {
                 System.out.println("problem accessing file" + file.getAbsolutePath());
             }
-        }        
+        }
+        setWordCount();
+        setETA();
     }//GEN-LAST:event_openFileActionPerformed
         
     private void greenColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_greenColorActionPerformed
@@ -414,10 +424,6 @@ public class readEasyUI extends JFrame {
         readEasyUI r = null;
         
         r = new readEasyUI();
-//        fileMenu.setEnabled(true);
-//        exitFile.setEnabled(true);
-//        playB.setEnabled(true);
-//        pauseB.setEnabled(true);
         
         r.setVisible(true);
         
@@ -462,13 +468,14 @@ public class readEasyUI extends JFrame {
                 s.close();
                 
                 certainIndex c = new certainIndex();
+                textA2.setText(list.toString().replace("[", "").replace("]", "").replace(",", ""));
                 
                 int L = list.size();
                 totalWords = list.size();
                 
                 for (int i = 0; i < L; i++) {
                     
-                    textA2.setText(list.toString());
+                //    textA2.setText(list.toString());
                     
                     if (paused.get()) {
                         synchronized (threadObject) {
