@@ -40,6 +40,7 @@ public class readEasyUI extends JFrame {
     private static long sleepTime = 240;
     private static long wpm;
     private static int totalWords = 0;
+    private static ArrayList<String> list = new ArrayList<String>();
     
     public readEasyUI() throws FileNotFoundException {
         initComponents();
@@ -374,7 +375,12 @@ public class readEasyUI extends JFrame {
                 //textA2.read(new FileReader(file.getAbsolutePath()), null);
                 if(Utils.getExtension(file).equals("doc")) {
                     docText = readMyDocument(file.getAbsolutePath());
-                    textA2.setText(docText.toString());
+                    for(int i = 0; i < docText.length; i++){
+                        list.add(docText[i].toString());
+                        
+                    }
+                    textA2.setText(list.toString());
+                    threadObject.start();
                     
                 }
                 else if(Utils.getExtension(file).equals("txt")) {
@@ -453,20 +459,23 @@ public class readEasyUI extends JFrame {
         /* Read in the file and scroll text upon play action */
         Runnable runnable = new Runnable() {
             public void run() {
+                
+                if(userFile != null){
                 Scanner s = null;
                 try {
                     s = new Scanner(userFile);
                 } catch (Exception ex) {
                     Logger.getLogger(readEasyUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-                ArrayList<String> list = new ArrayList<String>();
-                
+
                 while (s.hasNext()) {
                     list.add(s.next());
                 }
                 s.close();
-                
+                textA2.setText(list.toString().replace("[", "").replace("]", "").replace(",", ""));
+             
+                }
+              
                 certainIndex c = new certainIndex();
                 textA2.setText(list.toString().replace("[", "").replace("]", "").replace(",", ""));
                 
@@ -474,9 +483,7 @@ public class readEasyUI extends JFrame {
                 totalWords = list.size();
                 
                 for (int i = 0; i < L; i++) {
-                    
-                //    textA2.setText(list.toString());
-                    
+
                     if (paused.get()) {
                         synchronized (threadObject) {
                             
@@ -583,7 +590,8 @@ public class readEasyUI extends JFrame {
     
     private static String[] readMyDocument(String fileName) {
         POIFSFileSystem fs = null;
-        String [] text = null;
+        String text = null;
+         String strArray[] = null;
         try {
             fs = new POIFSFileSystem(new FileInputStream(fileName));
             HWPFDocument doc = new HWPFDocument(fs);
@@ -602,28 +610,25 @@ public class readEasyUI extends JFrame {
             /** Read the document summary**/
             //readDocumentSummary(doc);
             
-            
+             strArray = text.split(" ");
+                    
+                    
             
         } catch (Exception e) {
             e.printStackTrace();
         }
         
-        return text;
+        return strArray;
     }
     
-    private static String[] readParagraphs(HWPFDocument doc) throws Exception{
+    private static String readParagraphs(HWPFDocument doc) throws Exception{
         WordExtractor we = new WordExtractor(doc);
         
         /**Get the total number of paragraphs**/
-        String[] paragraphs = we.getParagraphText();
-        System.out.println("Total Paragraphs: "+paragraphs.length);
+        String paragraphs = we.getText();
+      //  System.out.println("Total Paragraphs: "+paragraphs.length);
         
-        for (int i = 0; i < paragraphs.length; i++) {
-            
-            System.out.println("Length of paragraph "+(i +1)+": "+ paragraphs[i].length());
-            System.out.println(paragraphs[i].toString());
-            
-        }
+     
         
         return paragraphs;
         
